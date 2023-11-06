@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Peach Faced</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+      border-radius: 20px;
+    }
+    input[type="text"] {
+      width: 80%;
+      padding: 8px;
+      margin: 10px 0;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #080808;
+      color: rgb(207, 0, 0);
+      border: none;
+      cursor: pointer;
+      border-radius: 10px;
+    }
+    button:hover {
+      background-color: #7a0000;
+    }
+    #output {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Peach Faced</h1>
+    <input type="text" id="searchInput" placeholder="Enter search keyword">
+    <button onclick="search()">Search</button>
+    <div id="output"></div>
+  </div>
+
+  <script>
+    function search() {
+      const searchInput = document.getElementById('searchInput').value;
+      fetch(`https://docs.google.com/spreadsheets/d/1XrDLXPjs96SkmW0653Qc15fU-qulMGrez8_IxT4MmUw/edit#gid=1217586681/values/Stock!A1:Z100?key=AIzaSyBSjz6sbVFal2DELHpyyF2RBaOirCxMRPs`)
+        .then(response => response.json())
+        .then(data => {
+          const values = data.values;
+          const results = values.filter(row => row.includes(searchInput));
+          displayResults(results);
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function displayResults(results) {
+      const outputDiv = document.getElementById('output');
+      outputDiv.innerHTML = '';
+      if (results.length === 0) {
+        outputDiv.innerHTML = 'No results found.';
+      } else {
+        const ul = document.createElement('ul');
+        results.forEach(result => {
+          const li = document.createElement('li');
+          li.textContent = result.join(' | ');
+          ul.appendChild(li);
+        });
+        outputDiv.appendChild(ul);
+      }
+    }
+  </script>
+</body>
+</html>
